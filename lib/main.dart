@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:next_movie/objectbox/objectbox.dart';
+import 'package:next_movie/database/database_helper.dart';
 import 'package:next_movie/task/task_queue.dart';
 import 'package:next_movie/ui/page/home_page.dart';
 import 'package:path/path.dart';
@@ -41,8 +41,8 @@ Future<void> main() async {
   } else {
     logger.info('文件夹已存在: ${settingFolder.path}');
   }
-  // 初始化 ObjectBoxProvider
-  await ObjectBox.initialize();
+  // 初始化 SQLite 数据库
+  await DatabaseHelper.initialize();
 
   runApp(
     MultiProvider(

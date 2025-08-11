@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
 import 'package:logging/logging.dart';
-import 'package:next_movie/model/movie.dart';
-import 'package:next_movie/objectbox/objectbox.dart';
 import 'package:next_movie/task/task_queue.dart';
 import 'package:next_movie/utils/app_path.dart';
+import 'package:next_movie/database/database_helper.dart';
 import 'package:path/path.dart';
 
 class AddThumbnailTask {
@@ -44,14 +43,7 @@ class AddThumbnailTask {
               quality: 90);
           if (thumbnailGenerated) {
             _logger.info('Thumbnail for $_movieId generated');
-            final box = ObjectBox.getBox<Movie>();
-            final movie = box.get(_movieId);
-            if (movie == null) {
-              _logger.warning('Movie $_movieId not found');
-              return;
-            }
-            movie.cover = [path];
-            box.put(movie);
+            await DatabaseHelper.updateMovieCover(_movieId, path);
           } else {
             _logger.warning('Thumbnail for $_movieId not generated');
           }
